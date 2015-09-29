@@ -1,5 +1,5 @@
 // CS3413 - Operating Systems I
-// Assignment 1 - Question 1
+// Assignment 1 - Question 2
 // Joel Stanley
 // Due October 1, 2015
 
@@ -46,7 +46,7 @@ void enqueue(char *userIn, char processIn, int arrivalIn, int durationIn) {
 	}
 } 
 
-int main() {
+int main(int argc, char *argv[]) {
 	
 	// File I/O variables.
 	file = fopen("data.txt", "r");
@@ -60,7 +60,7 @@ int main() {
 	struct Person info[10];
 	int count = 0, done = 0;
 	int i, skip = 0, j, dup = 0;
-
+	int n = *argv[1] - 48;
 
 	fgets(line, 1024, file); // Skips the first line of the input.
 	
@@ -90,14 +90,35 @@ int main() {
 			done = 1;
 		}
 	}
-
+	
 	fclose(file); // Closes the file as it is no longer needed.
 
 	int time = front->arrival;
 	
 	printf("Time	Job\n");
 
-	// This for loop prints the time and the job executing at that time.
+	int k = 0;
+	int timeDone[n];
+	//printf("%d\n", *argv[1]);
+
+	while(k < count) {
+		for(i = 0; i < n; i++) {
+			if(time >= front->arrival) {
+				if(time >= timeDone[i]) {
+					printf("%d	%c	%d\n", time, front->process, i);
+					timeDone[i] = time + front->duration;
+					front = front->next;
+					k++;
+				}
+			}
+		}
+
+		time++;
+		//printf("%d\n", time);
+		//printf("1:%d	2:%d\n", timeDone[0], timeDone[1]);
+	}
+		
+	/*// This for loop prints the time and the job executing at that time.
 	for(i = 0; i < count; i++) {
 		printf("%d	%c\n", time, front->process);
 		time += front->duration;
@@ -119,9 +140,6 @@ int main() {
 	for(i = 0; i < (count - dup); i++) {
 		printf("%s	%d\n", info[i].name, info[i].last);
 	}
-	
-	
+	*/
 	return 0;
 }
-
-

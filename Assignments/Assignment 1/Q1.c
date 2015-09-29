@@ -61,7 +61,6 @@ int main() {
 	int count = 0, done = 0;
 	int i, skip = 0, j, dup = 0;
 
-
 	fgets(line, 1024, file); // Skips the first line of the input.
 	
 	while(done == 0) {
