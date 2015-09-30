@@ -93,52 +93,58 @@ int main(int argc, char *argv[]) {
 	
 	fclose(file); // Closes the file as it is no longer needed.
 
-	int curTime = front->arrival;
-	
+	int time = front->arrival;
+
 	printf("Time	Job\n");
 
 	int k = 0;
-	int timeDone[n];
+	int timeDone[n]; // Used to keep track of cores.
 
+	// Makes sure every element is set to 0
+	for(i = 0; i < n; i++) {
+		timeDone[i] = 0;
+	}
+
+	// Prints each process that is executing on each CPU.
 	while(k < count) {
-		for(i = 0; i < n; i++) {
-			if(curTime >= front->arrival) {
-				if(curTime >= timeDone[i]) {
-					printf("%d	%c\n", curTime, front->process);
-					timeDone[i] = curTime + front->duration;
+		for(i = 0; i < n; i++) { // Loops for each CPU.
+			if(time >= front->arrival) { // Can only proceed if the next task has arrived.
+				if(time >= timeDone[i]) { // Is a CPU not being used?
+					printf("%d	%c\n", time, front->process);
+					timeDone[i] = time + front->duration; // Updates when that CPU will be free.
+				
+					// Keeps track of the last job for each user.
+					for(j = 0; j < count; j++) {
+						if(strcmp(info[j].name, front->user) == 0) {
+							info[j].last = timeDone[i];
+							break;
+						}
+					}
+					
 					front = front->next;
 					k++;
 				}
 			}
-		}
 
-		curTime++;
-		//printf("%d\n", time);
-		//printf("1:%d	2:%d\n", timeDone[0], timeDone[1]);
-	}
-		
-	/*// This for loop prints the time and the job executing at that time.
-	for(i = 0; i < count; i++) {
-		printf("%d	%c\n", time, front->process);
-		time += front->duration;
-		
-		// Updates the last time a process executed for a specific user.
-		for(j = 0; j < count; j++) {
-			if(strcmp(info[j].name, front->user) == 0) {
-				info[j].last = time;
+			if (k >= count) {
 				break;
 			}
 		}
-
-		front = front->next;
+	
+		time++;
 	}
+		
+	// Prints the Idle times for each CPU.
+	for(i = 0; i < n; i++) {
+		printf("%d	CPU %d IDLE\n", timeDone[i], i + 1);
+	}
+	
+	// Prints the Summary.
+	printf("\nSummary\n");
 
-	printf("%d	IDLE\n\nSummary\n", time); 
-
-	// Prints the summary.
-	for(i = 0; i < (count - dup); i++) {
+	for(i = 0; i < (count-dup); i++) {
 		printf("%s	%d\n", info[i].name, info[i].last);
-	}
-	*/
+	}	
+
 	return 0;
 }
