@@ -93,27 +93,26 @@ int main(int argc, char *argv[]) {
 	
 	fclose(file); // Closes the file as it is no longer needed.
 
-	int time = front->arrival;
+	int curTime = front->arrival;
 	
 	printf("Time	Job\n");
 
 	int k = 0;
 	int timeDone[n];
-	//printf("%d\n", *argv[1]);
 
 	while(k < count) {
 		for(i = 0; i < n; i++) {
-			if(time >= front->arrival) {
-				if(time >= timeDone[i]) {
-					printf("%d	%c	%d\n", time, front->process, i);
-					timeDone[i] = time + front->duration;
+			if(curTime >= front->arrival) {
+				if(curTime >= timeDone[i]) {
+					printf("%d	%c\n", curTime, front->process);
+					timeDone[i] = curTime + front->duration;
 					front = front->next;
 					k++;
 				}
 			}
 		}
 
-		time++;
+		curTime++;
 		//printf("%d\n", time);
 		//printf("1:%d	2:%d\n", timeDone[0], timeDone[1]);
 	}
