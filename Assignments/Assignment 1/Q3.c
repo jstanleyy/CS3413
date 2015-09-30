@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 
 // Used in the linked list queue.
 struct Node {
@@ -44,7 +45,11 @@ void enqueue(char *userIn, char processIn, int arrivalIn, int durationIn) {
 		end->next = new;
 		end = new;
 	}
-} 
+}
+ 
+void run() {
+	sleep(front->duration);
+}
 
 struct Person info[10];
 
@@ -97,27 +102,30 @@ int main(int argc, char *argv[]) {
 	int time = front->arrival;
 
 	printf("Time	Job\n");
-
-	/*int k = 0;
+	
+	int k = 0;
 	int timeDone[n]; // Used to keep track of cores.
 
-	// Makes sure every element is set to 0
 	for(i = 0; i < n; i++) {
 		timeDone[i] = 0;
-	} 
-	*/
+	}
+	
 	// Prints each process that is executing on each CPU.
 	while(k < count) {
 		for(i = 0; i < n; i++) { // Loops for each CPU.
 			if(time >= front->arrival) { // Can only proceed if the next task has arrived.
-				if(time >= timeDone[i]) { // Is a CPU not being used?
+				if(time >= timeDone[i]) {
+					pthread_t thread;
+					pthread_create(&thread, NULL, &run, NULL);
+					pthread_join(thread, NULL);
+					
 					printf("%d	%c\n", time, front->process);
 					timeDone[i] = time + front->duration; // Updates when that CPU will be free.
 				
-					// Keeps track of the last job for each user.
+					//Keeps track of the last job for each user.
 					for(j = 0; j < count; j++) {
-						if(strcmp(info[j].name, front->user) == 0) {
-							info[j].last = timeDone[i];
+							if(strcmp(info[j].name, front->user) == 0) {
+							info[j].last = time + front->duration;
 							break;
 						}
 					}
@@ -125,14 +133,16 @@ int main(int argc, char *argv[]) {
 					front = front->next;
 					k++;
 				}
-			}
+			} 
 
 			if (k >= count) {
 				break;
 			}
+
 		}
-	
-		time++;
+
+	time++;
+
 	}
 		
 	// Prints the Idle times for each CPU.
