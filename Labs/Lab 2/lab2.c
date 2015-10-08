@@ -31,17 +31,17 @@ int main() {
 
 	// Creates the 3 pipes for each thread.
 	if (pipe(fd) == -1) {
-		fprintf(stderr, "Pipe failed.");
+		printf("Pipe 1 failed.");
 		return 1;
 	}
 
 	if (pipe(fd2) == -1) {
-		fprintf(stderr, "Pipe failed.");
+		printf("Pipe 2 failed.");
 		return 1;
 	}
 
 	if (pipe(fd3) == -1) {
-		printf("Pipe failed.");
+		printf("Pipe 3 failed.");
 		return 1;
 	}
 
