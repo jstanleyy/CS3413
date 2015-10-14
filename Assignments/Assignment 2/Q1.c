@@ -150,6 +150,13 @@ int main(int argc, char *argv[]) {
 	int i, skip = 0, j, dup = 0;
 	n = *argv[1] - 48;
 
+	pthread_t thread_id[n];
+	for(i = 0; i < n; i++) {
+		int *coreNum = malloc(sizeof(*coreNum));
+		*coreNum = i + 1;
+		pthread_create(&thread_id[i], NULL, &run, coreNum);
+	}
+	
 	fgets(line, 1024, file); // Skips the first line of the input.
 	
 	while(done == 0) {
@@ -190,13 +197,6 @@ int main(int argc, char *argv[]) {
 
 	for(i = 0; i < n; i++) {
 		timeDone[i] = 0;
-	}
-	
-	pthread_t thread_id[n];
-	for(i = 0; i < n; i++) {
-		int *coreNum = malloc(sizeof(*coreNum));
-		*coreNum = i + 1;
-		pthread_create(&thread_id[i], NULL, &run, coreNum);
 	}
 	
 	for(i = 0; i< n; i++) {
