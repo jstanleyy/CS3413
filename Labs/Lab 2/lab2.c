@@ -85,7 +85,7 @@ void * getMax(void *in) {
 		if (read_max > max) {
 			max = read_max;
 		}
-	}
+	} 
 }
 
 // Reads in from the pipe fd2, and calculates the minimum value.
