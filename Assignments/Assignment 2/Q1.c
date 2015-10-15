@@ -106,8 +106,9 @@ void enqueue(char *userIn, char processIn, int arrivalIn, int durationIn) {
 void * run(void *in) {
 	int core = *((int *) in);
 	int timeInCore = curTime;
-	for( ; ; ) {
-		if (front != end) {
+	while (k < count) {
+	if(timeInCore >= front->arrival) {
+
 		pthread_mutex_lock(&m1);
 		if(timeInCore >= front->arrival) {
 			printf("%d	%c\n", timeInCore, front->process);
@@ -126,11 +127,11 @@ void * run(void *in) {
 			
      			sleep(sleepTime);
 			timeInCore += sleepTime;
-		}
+		}}
 		else {
 			timeInCore++;
 		}
-		}
+	
 	}
 	printf("%d	CPU %d IDLE\n", timeInCore, core);
 }
@@ -162,9 +163,8 @@ int main(int argc, char *argv[]) {
 	while(done == 0) {
 		char *tUser = (char *)malloc(sizeof(char[20])); // Allocates memory to be used for the input names
 		if(fscanf(file,"%s	%c	%d	%d", tUser, &tProcess, &tArrival, &tDuration) == 4) {
-			printf("adding user %s\n", tUser);
 			enqueue(tUser, tProcess, tArrival, tDuration);
-			printf("added %s\n", tUser);	
+
 			// Checks if the name already exists in the array, and skips if so.
 			for(i = 0; i < count; i++) {
 				if(strcmp(info[i].name, tUser) == 0) { 
