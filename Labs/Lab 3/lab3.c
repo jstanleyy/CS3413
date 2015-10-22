@@ -13,6 +13,7 @@
 sem_t agentSem;
 sem_t semA, semB, semC;
 
+// Function for the smoker with tobacco.
 void* smokerA() {	
 
 	for( ; ; ) {
@@ -24,6 +25,7 @@ void* smokerA() {
 	}
 }
 
+// Function for the smoker with paper.
 void* smokerB() {
 
 	for( ; ; ) {
@@ -35,6 +37,7 @@ void* smokerB() {
 	}
 }
 
+// Function for the smoker with matches.
 void* smokerC() {
 	
 	for ( ; ; ) {
@@ -46,6 +49,7 @@ void* smokerC() {
 	}
 }
 
+// Function for the agent that places items down. 
 void* agentFunc() {
 
 	for ( ; ; ) {
