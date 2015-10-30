@@ -18,10 +18,12 @@ void* smokerA() {
 
 	for( ; ; ) {
 		sem_wait(&semA);
-		printf("Smoker with tobacco will start smoking.\n");
-		sleep(rand() % 10 + 1); // Sleeps for a random time between 1 and 10.
-		printf("Smoker with tobacco has finished smoking.\n");
-		sem_post(&agentSem);
+			if(sem_trywait(&semB) == 0) {
+			printf("Smoker with tobacco will start smoking.\n");
+			sleep(rand() % 10 + 1); // Sleeps for a random time between 1 and 10.
+			printf("Smoker with tobacco has finished smoking.\n");
+			sem_post(&agentSem);
+		}
 	}
 }
 
@@ -30,10 +32,12 @@ void* smokerB() {
 
 	for( ; ; ) {
 		sem_wait(&semB);
-		printf("Smoker with paper will start smoking.\n");
-		sleep(rand() % 10 + 1); // Sleeps for a random time between 1 and 10.
-		printf("Smoker with paper has finished smoking.\n");
-		sem_post(&agentSem);
+		if(sem_trywait(&semC) == 0) {
+			printf("Smoker with paper will start smoking.\n");
+			sleep(rand() % 10 + 1); // Sleeps for a random time between 1 and 10.
+			printf("Smoker with paper has finished smoking.\n");
+			sem_post(&agentSem);
+		}
 	}
 }
 
@@ -42,10 +46,12 @@ void* smokerC() {
 	
 	for ( ; ; ) {
 		sem_wait(&semC);
-		printf("Smoker with matches will start smoking.\n");
-		sleep(rand() % 10 + 1); // Sleeps for a random time between 1 and 10.
-		printf("Smoker with matches has finished smoking.\n");
-		sem_post(&agentSem);
+		if(sem_trywait(&semA) == 0) {
+			printf("Smoker with matches will start smoking.\n");
+			sleep(rand() % 10 + 1); // Sleeps for a random time between 1 and 10.
+			printf("Smoker with matches has finished smoking.\n");
+			sem_post(&agentSem);
+		}
 	}
 }
 
@@ -57,13 +63,13 @@ void* agentFunc() {
 		int items = rand() % 3;
 
 		switch(items) {
-			case 0 : sem_post(&semA); // Items are paper and matches.
+			case 0 : sem_post(&semA); sem_post(&semB); // Items are paper and matches.
 			printf("\nItems placed are paper and matches.\n");
 			break;
-			case 1 : sem_post(&semB); // Items are tobacco and matches.
+			case 1 : sem_post(&semB); sem_post(&semC);// Items are tobacco and matches.
 			printf("\nItems placed are tobacco and matches.\n");
 			break;
-			case 2 : sem_post(&semC); // Items are tobacco and paper.
+			case 2 : sem_post(&semC); sem_post(&semA);// Items are tobacco and paper.
 			printf("\nItems placed are tobacco and paper.\n");
 			break;
 		}
