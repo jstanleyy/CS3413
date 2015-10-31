@@ -53,7 +53,6 @@ void* run (void *in) {
 		printf("Philosopher %d is eating.\n", id);
 		sleep(rand() % 3 + 1); // Eating for 1 to 3 seconds.
 		return_forks(id);
-	//	printf("Philosopher %d finished eating.\n", id);
 	}
 
 }
