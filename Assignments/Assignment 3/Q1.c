@@ -15,6 +15,7 @@ sem_t barbReady, custReady, seats, done;
 
 
 void* barber() {
+	
 	for( ; ; ) { // Infinite loop
 		sem_wait(&custReady); // Waits for a customer.
 		sem_wait(&seats); // Waits for access to change the number of available seats.
@@ -26,6 +27,7 @@ void* barber() {
 }
 
 void* customer() {
+	
 	for( ; ; ) { // Infinite loop
 		
 		wait(&seats);
@@ -60,4 +62,6 @@ int main(int argc, char *argv[]) {
 
 	pthread_join(barbThread, NULL);
 	pthread_join(custThread, NULL);
+	
+	return 0;
 }
