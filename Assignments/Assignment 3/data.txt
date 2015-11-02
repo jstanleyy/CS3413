@@ -1,0 +1,5 @@
+Car	Direction	Arrival
+Jim	0		2
+Mary	0		6
+Sue	1		8
+Mark	0		10
