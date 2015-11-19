@@ -1,0 +1,5 @@
+Q1: As more and more programs are opened, the amount of free memory will decrease. At a certain point, the SWAP space will start to be used, and the si(memory swapped in from the disk) and the so(memory swapped to the disk) will start to increase from 0. The number of r procs was also increasing, which makes sense as more processess were created when opening new programs.
+
+Q2: The process with the most page faults is /usr/lib/systemd/systemd-jo with 1028701698 minor faults and 6 major faults. A major fault is when disk access is required when an application is started. A minor fault occurs due to an issue with page allocation.
+
+Q3: 
