@@ -64,9 +64,9 @@ int main (int argc, char *argv[]) {
 
 int FCFS(int head) {
 	
-	//printf("In FCFC!\n");
+	printf("In FCFC!\n");
 	int movement = 0, current = 0;
-	fscanf(file, "%d", current);
+	fscanf(file, "%d", &current);
 	printf("%d\n", current);
 	return abs(head - current);
 }
