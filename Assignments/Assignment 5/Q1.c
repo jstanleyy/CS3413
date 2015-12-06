@@ -103,7 +103,7 @@ int SSTF(int head) {
 			done = 1;
 		}
 	}
-	
+	printf("HERE");
 	while(front != NULL && end != NULL) {
 		// Finds the request with the smallest seek time.
 		int smallestDif = INT_MAX, smallestDifData = 0, i, dif;
