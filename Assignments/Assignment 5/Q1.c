@@ -103,7 +103,7 @@ int SSTF(int head) {
 			done = 1;
 		}
 	}
-	printf("HERE");
+
 	while(front != NULL && end != NULL) {
 		// Finds the request with the smallest seek time.
 		int smallestDif = INT_MAX, smallestDifData = 0, i, dif;
@@ -113,12 +113,12 @@ int SSTF(int head) {
 			if(dif < smallestDif) {
 				smallestDif = dif;
 				smallestDifData = check->data;
+				break;
 			}
 			check = check->next;
 		}
 		
 		seek += smallestDif;
-		
 		dequeue(smallestDifData);
 		count--;
 		head = smallestDifData;
@@ -140,7 +140,7 @@ int SCAN(int head) {
 			done = 1;
 		}
 	}
-
+	
 	int direction = 0;
 	while(front != NULL && end != NULL) {
 		int i, closest;
@@ -174,6 +174,7 @@ int SCAN(int head) {
 			}			
 		}
 	}
+	
 	return seek;
 }
 
@@ -382,6 +383,7 @@ void dequeue(int dataIn) {
 		if(check->data == dataIn) {
 			if(front == end) {
 				front = end = NULL;
+				//break;
 			}
 			else if(check == front) {
 				front = front->next;
@@ -398,6 +400,7 @@ void dequeue(int dataIn) {
 			else {
 				check->prev->next = check->next;
 				check->next->prev = check->prev;
+				break;
 			}
 		}
 		
