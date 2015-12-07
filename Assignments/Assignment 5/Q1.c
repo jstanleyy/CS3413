@@ -144,7 +144,6 @@ int SCAN(int head) {
 	int direction = 0;
 	while(front != NULL && end != NULL) {
 		int i, closest;
-		
 		struct Node* check = front;
 		for(i = 0; i < count; i++) {
 			if(head < check->data) {
@@ -153,18 +152,19 @@ int SCAN(int head) {
 					break;
 				}
 				else {
-					closest = check->data;
+					closest = front->data;
 					break;
 				}
 			}
-		
-			check = check->next;
+			else {
+				check = check->next;
+			}
 		}
 		
 		seek += abs(head - closest);
+		head = closest;
 		dequeue(closest);
 		count--;
-		head = closest;
 		
 		if(check == front) {
 			if(direction == 0) {
@@ -198,25 +198,38 @@ int CSCAN(int head) {
 		
 		struct Node* check = front;
 		for(i = 0; i < count; i++) {
-			if(head < check->data) {
-				closest = check->data;
-				break;
+			if(flag == 0) {
+				if(head < check->data) {
+					closest = check->prev->data;
+					break;
+				}
+				else {
+					check = check->next;
+				}
 			}
-			
-			check = check->next;
+			else {
+				if(head >= check->data) {
+					closest = end->data;
+					break;
+				}
+				else {
+					check = check->prev;
+				}
+			}
 		}
 	
 		seek += abs(head - closest);
 		head = closest;
+		dequeue(closest);
+		count--;
 		
-		if(check == end && flag == 0) {
-			seek += (9999 - head);
-			head = 0;
+		if(check == front && flag == 0) {
+			seek += abs(head + 1);
+			head = 9999;
 			flag = 1;
 		}
 		
-		dequeue(closest);
-		count--;
+		//printf("FRONT: %d, END: %d, FRONT-NEXT: %d, HEAD: %d, CHECK: %d\n", front->data, end->data, front->next->data, head, check->data);
 	}
 	
 	return seek;
@@ -247,7 +260,7 @@ int LOOK(int head) {
 					break;
 				}
 				else {
-					closest = check->data;
+					closest = front->data;
 					break;
 				}
 			}
@@ -289,24 +302,37 @@ int CLOOK(int head) {
 		
 		struct Node* check = front;
 		for(i = 0; i < count; i++) {
-			if(head <= check->data) {
-				closest = check->data;
-				break;
+			if(flag == 0) {
+				if(head < check->data) {
+					closest = check->prev->data;
+					break;
+				}
+				else {
+					check = check->next;
+				}
 			}
-			
-			check = check->next;
+			else {
+				if(head >= check->data) {
+					closest = end->data;
+					break;
+				}
+				else {
+					check = check->prev;
+				}
+			}
 		}
 	
 		seek += abs(head - closest);
 		head = closest;
+		dequeue(closest);
+		count--;	
 		
-		if(check == end && flag == 0) {
-			seek +=  (9999 - (end->data - front->data));
-			head = front->data;
+		if(check == front && flag == 0) {
+			seek += abs(head + (9999 - end->data) + 1);
+			head = end->data;
 			flag = 1;
 		}
-		dequeue(closest);
-		count--;
+
 	}
 	
 	return seek;
@@ -377,34 +403,35 @@ void enqueue(int dataIn) {
 void dequeue(int dataIn) {
 	
 	int i;
-	struct Node* check = front;
+	struct Node* check1 = front;
 	
 	for(i = 0; i < count; i++) {
-		if(check->data == dataIn) {
+		if(check1->data == dataIn) {
 			if(front == end) {
 				front = end = NULL;
-				//break;
-			}
-			else if(check == front) {
-				front = front->next;
-				front->prev = NULL;
-				check->next = NULL;
 				break;
 			}
-			else if(check == end) {
+			else if(check1 == front) {
+				front = front->next;
+				front->prev = NULL;
+				check1->next = NULL;
+				break;
+			}
+			else if(check1 == end) {
 				end = end->prev;
 				end->next = NULL;
-				check->prev = NULL;
+				check1->prev = NULL;
 				break;
 			}
 			else {
-				check->prev->next = check->next;
-				check->next->prev = check->prev;
+				check1->prev->next = check1->next;
+				check1->next->prev = check1->prev;
 				break;
 			}
+			break;
 		}
 		
-		check = check->next;
+		check1 = check1->next;
 	}
 	
 }
